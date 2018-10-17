@@ -23,7 +23,7 @@ font = pygame.font.SysFont(None, 25)
 
 def screen_message(msg, color):
     text = font.render(msg, True, color)
-    gameDisplay.blit(text, [window_width / 2, window_height / 2])
+    gameDisplay.blit(text, [window_width / 5, window_height / 3])
 
 
 def main():
@@ -49,7 +49,8 @@ def main():
                     if event.key == pygame.K_ESCAPE:
                         gameExit = True
                         gameOver = False
-                    if event.key == pygame.K_KP_ENTER:
+                    if event.key == pygame.K_f:
+                        main()
                         
 
 
@@ -71,7 +72,7 @@ def main():
                     y_change = block_size
                     x_change = 0
         if x_coord >= window_width or x_coord <= 0 or y_coord >= window_height or y_coord <= 0:
-            gameExit = True
+            gameOver = True
 
         x_coord += x_change
         y_coord += y_change
@@ -84,8 +85,5 @@ def main():
 
 if __name__ == '__main__':
     main()
-    screen_message('Game Over', green)
-    pygame.display.update()
-    time.sleep(2)
     pygame.quit()
     quit()
