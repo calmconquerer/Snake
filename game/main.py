@@ -24,6 +24,14 @@ FPS = 30
 
 font = pygame.font.SysFont(None, 25)
 
+# snake function
+
+
+def snake(block_size, snakeList):
+    for XnY in snakeList:
+        pygame.draw.rect(gameDisplay, white, [XnY[0], XnY[1], block_size, block_size])
+
+
 # displays text on the screen
 
 
@@ -44,8 +52,11 @@ def main():
     x_change = 0
     y_change = 0
 
-    randAppleX = random.randrange(0, window_width - 20)
-    randAppleY = random.randrange(0, window_height - block_size)
+    snakeList = []
+    snakeLength = 1
+
+    randAppleX = round(random.randrange(0, window_width - 20) / 10.0) * 10.0
+    randAppleY = round(random.randrange(0, window_height - block_size) / 10.0) * 10.0
 
     while not gameExit:
         while gameOver is True:
@@ -84,8 +95,22 @@ def main():
         y_coord += y_change
         gameDisplay.fill(black)
         pygame.draw.rect(gameDisplay, red, [randAppleX, randAppleY, apple_size, apple_size])
-        pygame.draw.rect(gameDisplay, white, [x_coord, y_coord, 20, block_size])
+
+        snakeHead = []
+        snakeHead.append(x_coord)
+        snakeHead.append(y_coord)
+        snakeList.append(snakeHead)
+
+        if len(snakeList) > snakeLength:
+            del snakeList[0]
+
+        snake(block_size, snakeList)
         pygame.display.update()
+
+        if x_coord == randAppleX and y_coord == randAppleY:
+            randAppleX = round(random.randrange(0, window_width - 20) / 10.0) * 10.0
+            randAppleY = round(random.randrange(0, window_height - block_size) / 10.0) * 10.0
+            snakeLength += 2
         clock.tick(FPS)
 
 
