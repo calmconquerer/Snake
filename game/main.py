@@ -1,5 +1,4 @@
 import pygame
-import time
 import random
 
 pygame.init()
@@ -20,7 +19,7 @@ gameDisplay = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Sneks kek")
 
 clock = pygame.time.Clock()
-FPS = 30
+FPS = 15
 
 font = pygame.font.SysFont(None, 25)
 
@@ -52,24 +51,29 @@ def main():
     x_change = 0
     y_change = 0
 
+
     snakeList = []
     snakeLength = 1
 
-    randAppleX = round(random.randrange(0, window_width - 20) / 10.0) * 10.0
+    randAppleX = round(random.randrange(0, window_width - block_size) / 10.0) * 10.0
     randAppleY = round(random.randrange(0, window_height - block_size) / 10.0) * 10.0
 
     while not gameExit:
         while gameOver is True:
             gameDisplay.fill(white)
-            screen_message('Game Over, press F to play again or press esc to quit', red)
+            screen_message('Game Over, press F/Enter to play again or press esc to quit', green)
             pygame.display.update()
 
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    gameOver = False
+                    gameExit = True
+
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         gameExit = True
                         gameOver = False
-                    if event.key == pygame.K_f:
+                    if event.key == pygame.K_f or event.key == pygame.K_RETURN:
                         main()
 
         for event in pygame.event.get():
@@ -102,7 +106,11 @@ def main():
         snakeList.append(snakeHead)
 
         if len(snakeList) > snakeLength:
-            del snakeList[0]
+             del snakeList[0]
+
+        for body in snakeList[:-1]:
+            if body == snakeHead:
+                gameOver = True
 
         snake(block_size, snakeList)
         pygame.display.update()
@@ -110,7 +118,7 @@ def main():
         if x_coord == randAppleX and y_coord == randAppleY:
             randAppleX = round(random.randrange(0, window_width - 20) / 10.0) * 10.0
             randAppleY = round(random.randrange(0, window_height - block_size) / 10.0) * 10.0
-            snakeLength += 2
+            snakeLength += 1
         clock.tick(FPS)
 
 
